@@ -35,7 +35,7 @@ Este módulo faz parte de uma plataforma maior chamada **OrbitaVerde**, que inte
 
 ## 🔥 Como funciona a detecção
 
-O sistema analisa cada frame do vídeo utilizando o espaço de cores **HSV** (Hue, Saturation, Value), que permite separar com mais precisão as cores características de fogo e fumaça independentemente da iluminação do ambiente.
+O sistema analisa cada frame do vídeo utilizando o espaço de cores **HSV** (Hue, Saturation, Value), que permite separar com mais precisão as cores características de fogo e fumaça independentemente da iluminação do ambiente. A detecção combina **análise de cor** com **subtração de fundo** (MOG2), ignorando objetos estáticos e reduzindo falsos positivos.
 
 ### Pipeline de Visão Computacional
 
@@ -46,18 +46,16 @@ O sistema analisa cada frame do vídeo utilizando o espaço de cores **HSV** (Hu
        ↓
 ┌──────────────────┐     ┌──────────────────────┐
 │  Máscara de FOGO │     │  Máscara de FUMAÇA   │
-│  H: 0–35         │     │  S: < 50, V: 150–220 │
-│  S: > 100        │     │  (tons cinza/branco)  │
+│  H: 0–25, 155–180│     │  S: < 60, V: 90–240  │
+│  S: > 90, V: >150│     │  (tons cinza/branco)  │
 │  (laranja/vermelho)│   └──────────────────────┘
-└──────────────────┘
+└──────────────────┘              ↓
+       ↓              [AND com máscara de movimento (MOG2)]
+[Limpeza morfológica]             ↓
+       ↓              [Remove pixels já detectados como fogo]
+[Extração de contornos + filtro de área e forma]
        ↓
-[Limpeza morfológica (abertura + dilatação)]
-       ↓
-[Extração de contornos]
-       ↓
-[Filtro por área mínima (> 500px²)]
-       ↓
-[Bounding boxes + labels na tela]
+[Bounding boxes + label + confiança na tela]
        ↓
 [Cálculo de nível de risco por cobertura de tela]
        ↓
@@ -84,8 +82,8 @@ O sistema analisa cada frame do vídeo utilizando o espaço de cores **HSV** (Hu
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/orbita-verde-cv.git
-cd orbita-verde-cv
+git clone https://github.com/duduescuderoo/gs-physical-computing-orbita-verde.git
+cd gs-physical-computing-orbita-verde
 
 # Instale as dependências
 pip install -r requirements.txt
@@ -94,8 +92,14 @@ pip install -r requirements.txt
 ### Execução
 
 ```bash
-# Com arquivo de vídeo
+# Com arquivo de vídeo (velocidade normal)
 python main.py --video caminho/para/video.mp4
+
+# Com câmera lenta (recomendado para demonstração)
+python main.py --video caminho/para/video.mp4 --slow
+
+# Com delay customizado (ms por frame)
+python main.py --video caminho/para/video.mp4 --delay 200
 
 # Com webcam
 python main.py --webcam
@@ -108,10 +112,10 @@ python main.py --webcam
 ## 📁 Estrutura do Projeto
 
 ```
-PhysicalComputing_GS/
+gs-physical-computing-orbita-verde/
 │
 ├── main.py                 # Script principal — captura e pipeline
-├── detector.py             # Lógica de detecção via máscaras HSV
+├── detector.py             # Lógica de detecção (cor HSV + movimento MOG2)
 ├── utils.py                # Renderização visual e cálculo de risco
 ├── gerar_video_teste.py    # Gerador de vídeo sintético para testes
 │
@@ -149,14 +153,6 @@ Este projeto contribui diretamente para:
 | Arthur Silva | RM553320 |
 | Eduardo Escudero | RM556527 |
 
-**Turma:** [sua turma]
-**Curso:** [seu curso]
 **Disciplina:** Physical Computing: IoT & IoB
-**Professor:** [nome do professor]
-
----
-
-## 🏫 Instituição
-
-**FIAP — Faculdade de Informática e Administração Paulista**
-Global Solution | 1º Semestre de 2026
+**Instituição:** FIAP — Faculdade de Informática e Administração Paulista
+**Global Solution | 1º Semestre de 2026**
