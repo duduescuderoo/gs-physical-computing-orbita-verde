@@ -91,15 +91,26 @@ pip install -r requirements.txt
 
 ### Execução
 
+O projeto inclui duas opções de vídeo para teste:
+
+**Opção 1 — Vídeo real de demonstração (já incluso no repositório):**
 ```bash
-# Com arquivo de vídeo (velocidade normal)
-python main.py --video caminho/para/video.mp4
+python main.py --video video_teste_real.mp4 --slow
+```
 
-# Com câmera lenta (recomendado para demonstração)
-python main.py --video caminho/para/video.mp4 --slow
+**Opção 2 — Gerar vídeo sintético de fogo e fumaça:**
+```bash
+python gerar_video_teste.py
+python main.py --video teste_fogo.mp4 --slow
+```
 
-# Com delay customizado (ms por frame)
-python main.py --video caminho/para/video.mp4 --delay 200
+**Outras opções de execução:**
+```bash
+# Velocidade normal
+python main.py --video video_teste_real.mp4
+
+# Delay customizado (ms por frame — quanto maior, mais lento)
+python main.py --video video_teste_real.mp4 --delay 200
 
 # Com webcam
 python main.py --webcam

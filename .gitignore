@@ -2,10 +2,11 @@
 __pycache__/
 *.py[cod]
 
-# Videos de teste (nao subir arquivos grandes)
+# Videos (ignorar todos exceto o de demonstracao)
 *.mp4
 *.avi
 *.mov
+!video_teste_real.mp4
 
 # IDE
 .vscode/
