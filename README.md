@@ -152,6 +152,7 @@ Este projeto contribui diretamente para:
 | Luca Monteiro | RM556906 |
 | Arthur Silva | RM553320 |
 | Eduardo Escudero | RM556527 |
+| Leonardo Munhoz | RM556824 |
 
 **Disciplina:** Physical Computing: IoT & IoB
 **Instituição:** FIAP — Faculdade de Informática e Administração Paulista
